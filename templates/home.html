@@ -1,0 +1,104 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> 
+        <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            
+        <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+
+        <style>
+          
+            body{
+                background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
+                background-size:cover;
+            }
+            tr{
+                width:10000px;
+            }
+
+            td{
+                width:1000px;
+            }
+
+    
+   
+        </style>
+        
+    </head>
+
+    <body align="center">
+        
+      
+        <h1 style="color:black"> Dashboard</h1>
+        <h1 style="color:black">You can search for the books here...!!</h1>
+        
+        <div class="b">
+           
+        <form>
+            <div class="form px-4 pt-5"> <br>
+            <input type="text" name="search" id="search" class="a" placeholder="Search here"><br><br>
+            <button type="button" value="Submit" onclick="search_book()" class="btn btn-primary">Submit</button><br>
+            
+            </div>
+        </form>
+        </div>
+        <p id="demo"></p>
+        <div id="content"></div>
+        <script>
+       
+            var books;
+            function search_book(){
+                const request=new XMLHttpRequest();
+                const val=document.querySelector('#search').value;
+                request.open("POST","/api/search")
+                request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+                document.querySelector("#content").innerHTML=""
+                console.log("1")
+
+                request.onload=()=>{
+                    const response= JSON.parse(request.responseText);
+                    console.log(response)
+                    
+                    if(request.status===200){
+                        
+                        response.books.forEach(book=>{
+                            let i=`
+                           
+                            <div class="c">
+                            
+                            <table align="center" class="table table-inverse" >
+                            <!--<tr><thead><tr><th>ISBN</th><th>NAME</th><th>AUTHOR</th><th>YEAR</th></tr></tbody>-->
+                            <tbody>
+                            <td>${book.isbn}
+                            </td>
+                            <td>${book.name}
+                            </td>
+                            <td>${book.author}
+                            </td>
+                            <td>${book.year}
+                            </td>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                        `;
+                            document.querySelector("#content").innerHTML+="<tbody>"+i+"</tbody>"
+        
+                            
+                        });
+                    }
+                }
+
+                const data=JSON.stringify({"search": val,"email": "pn@gmail.com"})
+                request.send(data);
+                return false;
+            }
+        </script>
+        </body></html>
+      
+        
+        
